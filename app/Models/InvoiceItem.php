@@ -12,7 +12,13 @@ class InvoiceItem extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = [];
+    protected $allowedFields    = [
+        'invoice_id',
+        'product_id',
+        'quantity',
+        'price',
+        'subtotal',
+    ];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;

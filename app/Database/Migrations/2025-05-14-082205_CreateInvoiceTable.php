@@ -19,11 +19,6 @@ class CreateInvoiceTable extends Migration
                 'constraint' => 255,
                 'null' => false,
             ],
-            'user_id' => [
-                'type'  => 'int',
-                'constraint' => 11,
-                'null' => false,
-            ],
             'staff_id' => [
                 'type'  => 'int',
                 'constraint' => 11,
@@ -47,10 +42,13 @@ class CreateInvoiceTable extends Migration
                 'type'  => 'datetime',
                 'null' => true,
             ],
+            'deleted_at' => [
+                'type'  => 'datetime',
+                'null' => true,
+            ],
         ]);
 
         $this->forge->addKey('id', true);
-        $this->forge->addForeignKey('user_id', 'users', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('staff_id', 'staffs', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('invoices');
     }
