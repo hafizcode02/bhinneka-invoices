@@ -12,7 +12,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">Manage Product Item</h1>
+                <h1 class="m-0">Manage Product</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -28,7 +28,7 @@
 <?= $this->section('main-content') ?>
 <div class="card">
     <div class="card-header">
-        <button class="btn btn-info" data-toggle="modal" data-target="#addProductModal">
+        <button class="btn btn-info btn-add" data-toggle="modal" data-target="#addProductModal">
             <i class="fas fa-plus"></i>
             &nbsp;&nbsp;Tambah Produk
         </button>
@@ -65,16 +65,16 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="ProductCode" class="form-label">Kode Produk</label>
-                        <input type="text" class="form-control" id="ProductCode" name="code" required>
+                        <input type="text" class="form-control" id="ProductCode" name="code" required readonly>
                     </div>
                     <div class="mb-3">
                         <label for="ProductName" class="form-label">Nama Produk</label>
                         <input type="text" class="form-control" id="ProductName" name="name" required>
                     </div>
                     <div class="mb-3">
-                        <label for="ProductUnit" class="form-label">Unit</label>
+                        <label for="ProductUnit" class="form-label">Satuan Unit</label>
                         <select class="form-control" id="ProductUnit" name="unit" required>
-                            <option value="">Pilih Unit</option>
+                            <option value="">Pilih Satuan Unit</option>
                             <option value="Pcs">Pcs</option>
                             <option value="Box">Box</option>
                             <option value="Kg">Kg</option>
@@ -112,16 +112,16 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="editProductCode" class="form-label">Kode Produk</label>
-                        <input type="text" class="form-control" id="editProductCode" name="code" required>
+                        <input type="text" class="form-control" id="editProductCode" name="code" readonly>
                     </div>
                     <div class="mb-3">
                         <label for="editProductName" class="form-label">Nama Produk</label>
                         <input type="text" class="form-control" id="editProductName" name="name" required>
                     </div>
                     <div class="mb-3">
-                        <label for="editProductUnit" class="form-label">Unit</label>
+                        <label for="editProductUnit" class="form-label">Satuan Unit</label>
                         <select class="form-control" id="editProductUnit" name="unit" required>
-                            <option value="">Pilih Unit</option>
+                            <option value="">Pilih Satuan Unit</option>
                             <option value="Pcs">Pcs</option>
                             <option value="Box">Box</option>
                             <option value="Kg">Kg</option>
@@ -190,6 +190,20 @@
         });
     </script>
 <?php endif; ?>
+<?php if ($errors = session()->getFlashdata('errors')): ?>
+    <script>
+        // Display each error message (consider to move to toastr)
+        document.addEventListener('DOMContentLoaded', function() {
+            <?php foreach ($errors as $error): ?>
+                console.log('<?= esc($error) ?>');
+                Toast.fire({
+                    icon: 'error',
+                    title: '<?= esc($error) ?>',
+                });
+            <?php endforeach; ?>
+        });
+    </script>
+<?php endif; ?>
 
 <script src="<?= base_url('plugins/datatables/jquery.dataTables.min.js') ?>"></script>
 <script src="<?= base_url('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') ?>"></script>
@@ -246,6 +260,21 @@
             ],
             pageLength: 10,
             lengthMenu: [5, 10, 25, 50, 100],
+        });
+
+        // Generate Product Code
+        $(document).on('click', '.btn-add', function() {
+            $.ajax({
+                url: '/product/generateCode',
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    $('#ProductCode').val(data.code);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error generating code:', error);
+                }
+            });
         });
 
         // Modal Edit

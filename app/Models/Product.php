@@ -33,16 +33,21 @@ class Product extends Model
     protected $deletedField  = 'deleted_at';
 
     // Validation
-    protected $validationRules      = [];
+    protected $validationRules      = [
+        'code'  => 'required|is_unique[products.code]',
+        'name'  => 'required',
+        'unit'  => 'required',
+        'price' => 'required|decimal',
+    ];
     protected $validationMessages   = [];
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;
 
     // Callbacks
     protected $allowCallbacks = true;
-    protected $beforeInsert   = [];
+    protected $beforeInsert   = ['setInsertValidationRules'];
     protected $afterInsert    = [];
-    protected $beforeUpdate   = [];
+    protected $beforeUpdate   = ['setUpdateValidationRules'];
     protected $afterUpdate    = [];
     protected $beforeFind     = [];
     protected $afterFind      = [];
@@ -50,9 +55,31 @@ class Product extends Model
     protected $afterDelete    = [];
 
     // Custom methods
+    protected function setInsertValidationRules(array $data)
+    {
+        $this->validationRules = [
+            'code'  => 'required|is_unique[products.code]',
+            'name'  => 'required',
+            'unit'  => 'required',
+            'price' => 'required|decimal',
+        ];
+        return $data;
+    }
+
+    protected function setUpdateValidationRules(array $data)
+    {
+        $this->validationRules = [
+            'name'  => 'required',
+            'unit'  => 'required',
+            'price' => 'required|decimal',
+        ];
+        return $data;
+    }
+
     public function getPaginatedProducts($start, $length, $searchValue = null)
     {
         $builder = $this->builder();
+        $builder->where(['deleted_at' => null]);
 
         // Apply filtering
         if (!empty($searchValue)) {
@@ -81,5 +108,22 @@ class Product extends Model
     public function getTotalProducts()
     {
         return $this->countAll();
+    }
+
+    public function generateCode()
+    {
+        $lastProduct = $this->orderBy('id', 'DESC')->first();
+        $lastCode = $lastProduct ? $lastProduct['code'] : null;
+
+        if ($lastCode) {
+            // Extract the numeric part of the code after "PR"
+            $lastNumber = (int) substr($lastCode, 2);
+            // Increment the number and pad it to 2 digits
+            $newNumber = str_pad($lastNumber + 1, 2, '0', STR_PAD_LEFT);
+            return 'PR' . $newNumber;
+        }
+
+        // Default code if no product exists
+        return 'PR01';
     }
 }

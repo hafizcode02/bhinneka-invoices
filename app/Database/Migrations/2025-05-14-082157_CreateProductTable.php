@@ -17,6 +17,7 @@ class CreateProductTable extends Migration
             'code'       => [
                 'type'       => 'VARCHAR',
                 'constraint' => 50,
+                'unique'     => true,
             ],
             'name'        => [
                 'type'       => 'VARCHAR',
