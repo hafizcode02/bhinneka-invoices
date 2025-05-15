@@ -35,9 +35,6 @@ class InvoiceController extends BaseController
     // Create Invoice
     public function create()
     {
-        $staffs = $this->staffModel->findAll();
-        $products = $this->productModel->findAll();
-
         return view('pages/invoices/create', [
             'title' => 'Buat Invoice Baru',
             'page' => 'invoice',
@@ -175,6 +172,7 @@ class InvoiceController extends BaseController
 
             // Process items
             $items = $this->request->getPost('items');
+            // Existing item IDs
             $existingItemIds = [];
 
             foreach ($items as $item) {
@@ -191,18 +189,40 @@ class InvoiceController extends BaseController
 
                     // Update existing or insert new item
                     if (isset($item['id']) && !empty($item['id'])) {
-                        $this->invoiceItemModel->update($item['id'], $itemData);
+                        $result = $this->invoiceItemModel->update($item['id'], $itemData);
                         $existingItemIds[] = $item['id'];
                     } else {
-                        $this->invoiceItemModel->insert($itemData);
+                        $result = $this->invoiceItemModel->insert($itemData);
+
+                        // Get the ID of the newly inserted item and add to existingItemIds
+                        if (is_numeric($result) && $result > 0) {
+                            $newItemId = $this->invoiceItemModel->getInsertID();
+                            $existingItemIds[] = $newItemId;
+                        } else if ($this->invoiceItemModel->getInsertID() > 0) {
+                            $newItemId = $this->invoiceItemModel->getInsertID();
+                            $existingItemIds[] = $newItemId;
+                        }
+
+                        // Check for errors
+                        if ($result === false) {
+                            log_message('error', 'Failed to insert new invoice item: ' . json_encode($this->invoiceItemModel->errors()));
+                        }
                     }
                 }
             }
 
             // Delete removed items
-            $this->invoiceItemModel->where('invoice_id', $id)
-                ->whereNotIn('id', $existingItemIds)
-                ->delete();
+            if (!empty($existingItemIds)) {
+                $removedItems = $this->invoiceItemModel->where('invoice_id', $id)
+                    ->whereNotIn('id', $existingItemIds)
+                    ->findAll();
+
+                if (!empty($removedItems)) {
+                    foreach ($removedItems as $removedItem) {
+                        $this->invoiceItemModel->delete($removedItem['id']);
+                    }
+                }
+            }
 
             $db->transCommit();
             return redirect()->to('/invoice')->with('success', 'Invoice berhasil diupdate.');
