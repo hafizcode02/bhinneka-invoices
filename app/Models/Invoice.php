@@ -16,6 +16,7 @@ class Invoice extends Model
         'invoice_number',
         'staff_id',
         'company_to',
+        'company_address',
         'attention_to',
     ];
 
