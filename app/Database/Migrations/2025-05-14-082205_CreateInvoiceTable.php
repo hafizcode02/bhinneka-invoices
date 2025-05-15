@@ -18,6 +18,7 @@ class CreateInvoiceTable extends Migration
                 'type'  => 'varchar',
                 'constraint' => 255,
                 'null' => false,
+                'unique' => true,
             ],
             'staff_id' => [
                 'type'  => 'int',
@@ -27,6 +28,10 @@ class CreateInvoiceTable extends Migration
             'company_to' => [
                 'type'  => 'varchar',
                 'constraint' => 255,
+                'null' => false,
+            ],
+            'company_address' => [
+                'type'  => 'text',
                 'null' => false,
             ],
             'attention_to' => [
