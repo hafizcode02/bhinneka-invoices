@@ -22,6 +22,10 @@ class CreateStaffTable extends Migration
                 'type'       => 'VARCHAR',
                 'constraint' => 100,
             ],
+            'gender'        => [
+                'type'       => 'ENUM',
+                'constraint' => ['Pria', 'Wanita'],
+            ],
             'phone'       => [
                 'type'       => 'VARCHAR',
                 'constraint' => 20,
