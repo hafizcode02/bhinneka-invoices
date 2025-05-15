@@ -48,4 +48,38 @@ class Product extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    // Custom methods
+    public function getPaginatedProducts($start, $length, $searchValue = null)
+    {
+        $builder = $this->builder();
+
+        // Apply filtering
+        if (!empty($searchValue)) {
+            $builder->groupStart()
+                ->like('code', $searchValue)
+                ->orLike('name', $searchValue)
+                ->orLike('unit', $searchValue)
+                ->orLike('price', $searchValue)
+                ->groupEnd();
+        }
+
+        // Count filtered results
+        $totalFiltered = $builder->countAllResults(false);
+
+        // Apply pagination
+        $data = $builder->limit($length, $start)
+            ->get()
+            ->getResultArray();
+
+        return [
+            'data' => $data,
+            'totalFiltered' => $totalFiltered,
+        ];
+    }
+
+    public function getTotalProducts()
+    {
+        return $this->countAll();
+    }
 }

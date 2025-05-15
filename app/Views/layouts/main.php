@@ -15,6 +15,8 @@
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="<?= base_url('dist/css/adminlte.min.css') ?>">
+    <!-- SweetAlert2 Theme -->
+    <link rel="stylesheet" href="<?= base_url('plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') ?>">
     <!-- Custom CSS -->
     <?= $this->renderSection('styles') ?>
 </head>
@@ -30,6 +32,7 @@
                 <section class="content">
                     <div class="container-fluid">
                         <?= $this->renderSection('main-content') ?>
+                        
                     </div>
                 </section>
             </div>
@@ -50,7 +53,6 @@
     <script src="<?= base_url('dist/js/adminlte.js') ?>"></script>
     <!-- SweetAlert2 -->
     <script src="<?= base_url('plugins/sweetalert2/sweetalert2.min.js') ?>"></script>
-
     <!-- Toastr -->
     <script>
         var Toast = Swal.mixin({

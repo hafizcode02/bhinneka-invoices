@@ -17,6 +17,11 @@ $routes->group('', ['filter' => 'role:admin,superadmin'], function ($routes) {
     $routes->get('/dashboard', 'DashboardController::index');
 
     $routes->group('product', function ($routes) {
+        // Json API Endpoint
+        $routes->post('getProducts', 'ProductController::getProducts');
+
+        // Web Endpoint
         $routes->get('/', 'ProductController::index');
+        $routes->post('store', 'ProductController::store');
     });
 });
