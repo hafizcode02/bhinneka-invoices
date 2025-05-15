@@ -38,4 +38,22 @@ $routes->group('', ['filter' => 'role:admin,superadmin'], function ($routes) {
         $routes->put('update/(:num)', 'StaffController::update/$1');
         $routes->delete('destroy/(:num)', 'StaffController::destroy/$1');
     });
+
+    $routes->group('invoice', function ($routes) {
+        // Json API Endpoint
+        $routes->post('getInvoices', 'InvoiceController::getInvoices');
+        $routes->get('generateNumber', 'InvoiceController::generateNumber');
+        $routes->get('getAllStaffs', 'InvoiceController::getAllStaffs');
+        $routes->get('getAllProducts', 'InvoiceController::getAllProducts');
+
+        // Web Endpoint
+        $routes->get('/', 'InvoiceController::index');
+        $routes->get('create', 'InvoiceController::create');
+        $routes->post('store', 'InvoiceController::store');
+        $routes->get('edit/(:num)', 'InvoiceController::edit/$1');
+        $routes->put('update/(:num)', 'InvoiceController::update/$1');
+        $routes->get('detail/(:num)', 'InvoiceController::detail/$1');
+        $routes->get('print/(:num)', 'InvoiceController::print/$1');
+        $routes->delete('destroy/(:num)', 'InvoiceController::destroy/$1');
+    });
 });
