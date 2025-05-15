@@ -18,10 +18,10 @@ class InvoiceController extends BaseController
 
     public function __construct()
     {
-        $this->invoiceModel = new Invoice();
-        $this->invoiceItemModel = new InvoiceItem();
-        $this->productModel = new Product();
-        $this->staffModel = new Staff();
+        $this->invoiceModel = model(Invoice::class);
+        $this->invoiceItemModel = model(InvoiceItem::class);
+        $this->productModel = model(Product::class);
+        $this->staffModel = model(Staff::class);
     }
 
     public function index()
@@ -37,7 +37,7 @@ class InvoiceController extends BaseController
     {
         return view('pages/invoices/create', [
             'title' => 'Buat Invoice Baru',
-            'page' => 'invoice',
+            'page' => 'Tambah Invoice',
         ]);
     }
 
