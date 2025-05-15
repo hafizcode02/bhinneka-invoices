@@ -73,7 +73,7 @@
         }
 
         .signature-box {
-            width: 45%;
+            width: 50%;
             text-align: center;
         }
 
@@ -84,18 +84,68 @@
             }
 
             .no-print {
-                display: none;
+                display: none !important;
             }
 
             body {
-                margin: 0;
-                padding: 0;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            .invoice-container {
+                border: 1px solid #000 !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                padding: 15px !important;
+            }
+
+            .row {
+                display: flex !important;
+                flex-wrap: wrap !important;
+                margin-right: -7.5px !important;
+                margin-left: -7.5px !important;
+            }
+
+            .col-md-6 {
+                flex: 0 0 50% !important;
+                max-width: 50% !important;
+                position: relative !important;
+                width: 50% !important;
+                padding-right: 7.5px !important;
+                padding-left: 7.5px !important;
+            }
+            
+            .text-right {
+                text-align: right !important;
+            }
+            
+            .text-center {
+                text-align: center !important;
+            }
+            
+            .table-items {
+                width: 100% !important;
+                border-collapse: collapse !important;
+            }
+            
+            .table-items th, 
+            .table-items td {
+                border: 1px solid #000 !important;
+                padding: 8px !important;
+            }
+            
+            .container {
+                width: 100% !important;
+                padding-right: 15px !important;
+                padding-left: 15px !important;
+                margin-right: auto !important;
+                margin-left: auto !important;
             }
         }
     </style>
 </head>
 
-<body>
+<body onload="window.print()">
     <div class="container my-4">
         <div class="no-print mb-4">
             <button class="btn btn-primary" onclick="window.print()">
@@ -170,12 +220,12 @@
 
             <!-- Signature section -->
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-6 text-center">
                     <div style="margin-top: 30px;">
                         <strong>Purchasing</strong>
                     </div>
                 </div>
-                <div class="col-md-6 text-right">
+                <div class="col-md-6 text-center">
                     <div style="margin-top: 30px;">
                         <?php
                         $location = '';
@@ -216,7 +266,7 @@
                 <div class="signature-box">
                     <div style="height: 80px;"></div>
                     <div>
-                        <strong>Ilham</strong>
+                        <strong><?= $invoice['staff_name'] ?></strong>
                     </div>
                 </div>
                 <div class="signature-box">
