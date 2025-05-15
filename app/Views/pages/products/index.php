@@ -220,13 +220,20 @@
                 type: 'POST',
             },
             columns: [{
-                    data: 'id'
+                    data: null,
+                    orderable: false,
+                    searchable: false,
+                    render: function(data, type, row, meta) {
+                        const pageInfo = $('#productTable').DataTable().page.info();
+                        return pageInfo.start + meta.row + 1;
+                    }
                 },
                 {
-                    data: 'code'
+                    data: 'code',
                 },
                 {
-                    data: 'name'
+                    data: 'name',
+                    orderable: false,
                 },
                 {
                     data: 'unit'
@@ -254,9 +261,6 @@
                     `;
                     },
                 },
-            ],
-            order: [
-                [0, 'asc']
             ],
             pageLength: 10,
             lengthMenu: [5, 10, 25, 50, 100],
