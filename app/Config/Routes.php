@@ -56,4 +56,9 @@ $routes->group('', ['filter' => 'role:admin,superadmin'], function ($routes) {
         $routes->get('print/(:num)', 'InvoiceController::print/$1');
         $routes->delete('destroy/(:num)', 'InvoiceController::destroy/$1');
     });
+
+    $routes->group('profile', function ($routes) {
+        $routes->get('/', 'UserController::getProfile');
+        $routes->put('update', 'UserController::updateProfile');
+    });
 });

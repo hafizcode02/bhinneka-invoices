@@ -54,7 +54,7 @@
                 (object) [
                     'icon' => 'fas fa-user',
                     'name' => 'Profil Akun',
-                    'link' => '/profil-akun',
+                    'link' => '/profile',
                 ],
             ];
             ?>
