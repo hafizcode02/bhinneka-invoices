@@ -27,4 +27,15 @@ $routes->group('', ['filter' => 'role:admin,superadmin'], function ($routes) {
         $routes->put('update/(:num)', 'ProductController::update/$1');
         $routes->delete('destroy/(:num)', 'ProductController::destroy/$1');
     });
+
+    $routes->group('staff', function ($routes) {
+        // Json API Endpoint
+        $routes->post('getStaffList', 'StaffController::getStaffList');
+
+        // Web Endpoint
+        $routes->get('/', 'StaffController::index');
+        $routes->post('store', 'StaffController::store');
+        $routes->put('update/(:num)', 'StaffController::update/$1');
+        $routes->delete('destroy/(:num)', 'StaffController::destroy/$1');
+    });
 });
