@@ -192,20 +192,33 @@ class InvoiceController extends BaseController
                         $result = $this->invoiceItemModel->update($item['id'], $itemData);
                         $existingItemIds[] = $item['id'];
                     } else {
-                        $result = $this->invoiceItemModel->insert($itemData);
+                        $check = $this->invoiceItemModel->where('invoice_id', $id)
+                            ->where('product_id', $item['product_id'])
+                            ->first();
 
-                        // Get the ID of the newly inserted item and add to existingItemIds
-                        if (is_numeric($result) && $result > 0) {
-                            $newItemId = $this->invoiceItemModel->getInsertID();
-                            $existingItemIds[] = $newItemId;
-                        } else if ($this->invoiceItemModel->getInsertID() > 0) {
-                            $newItemId = $this->invoiceItemModel->getInsertID();
-                            $existingItemIds[] = $newItemId;
-                        }
+                        if ($check) {
+                            $itemData['id'] = $check['id'];
+                            $result = $this->invoiceItemModel->update($check['id'], [
+                                'quantity' => $check['quantity'] + $item['quantity'],
+                                'subtotal' => $check['subtotal'] + $item['subtotal'],
+                            ]);
+                            $existingItemIds[] = $check['id'];
+                        } else {
+                            $result = $this->invoiceItemModel->insert($itemData);
 
-                        // Check for errors
-                        if ($result === false) {
-                            log_message('error', 'Failed to insert new invoice item: ' . json_encode($this->invoiceItemModel->errors()));
+                            // Get the ID of the newly inserted item and add to existingItemIds
+                            if (is_numeric($result) && $result > 0) {
+                                $newItemId = $this->invoiceItemModel->getInsertID();
+                                $existingItemIds[] = $newItemId;
+                            } else if ($this->invoiceItemModel->getInsertID() > 0) {
+                                $newItemId = $this->invoiceItemModel->getInsertID();
+                                $existingItemIds[] = $newItemId;
+                            }
+
+                            // Check for errors
+                            if ($result === false) {
+                                log_message('error', 'Failed to insert new invoice item: ' . json_encode($this->invoiceItemModel->errors()));
+                            }
                         }
                     }
                 }
